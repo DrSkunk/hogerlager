@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
+import styled from 'styled-components';
 import shuffleSeed from 'shuffle-seed';
 import Card from './Card';
 
@@ -10,7 +11,11 @@ const suits = {
   spades: 'S'
 };
 
-const values = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 'J', 'Q', 'K'];
+const values = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
+
+const Wrapper = styled.div`
+  padding: 20px;
+`;
 
 function Team(props) {
   const { cards, team, onCardClick } = props;
@@ -90,7 +95,9 @@ export default class App extends Component {
       this.setState(state => {
         const team1 = JSON.parse(JSON.stringify(state.team1));
         team1[index].found = true;
-        team1[index + 1].visible = true;
+        if (index !== 51) {
+          team1[index + 1].visible = true;
+        }
         return { team1, team1score: state.team1score + 1 };
       });
     } else {
@@ -98,7 +105,10 @@ export default class App extends Component {
         const team2 = JSON.parse(JSON.stringify(state.team2));
         team2[index].found = true;
         team2[index + 1].visible = true;
-        return { team2, team2score: state.team1score + 1 };
+        if (index !== 51) {
+          team2[index + 1].visible = true;
+        }
+        return { team2, team2score: state.team2score + 1 };
       });
     }
   };
@@ -107,12 +117,12 @@ export default class App extends Component {
     const { team1, team2, team1score, team2score } = this.state;
 
     return (
-      <div>
+      <Wrapper>
         <h1>Team1 - {team1score}</h1>
         <Team cards={team1} team={1} onCardClick={this.onCardClick} />
         <h1>Team2 - {team2score}</h1>
         <Team cards={team2} team={2} onCardClick={this.onCardClick} />
-      </div>
+      </Wrapper>
     );
   }
 }
